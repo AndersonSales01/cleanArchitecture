@@ -1,4 +1,4 @@
-package com.accenture.cleanarchitecture.presentation.common
+package com.accenture.cleanarchitecture.app.common
 
 import androidx.appcompat.app.AppCompatActivity
 

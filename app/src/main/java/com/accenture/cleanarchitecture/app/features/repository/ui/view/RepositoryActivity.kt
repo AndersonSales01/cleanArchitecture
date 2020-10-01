@@ -1,13 +1,13 @@
-package com.accenture.cleanarchitecture.presentation.ui.repository.view
+package com.accenture.cleanarchitecture.app.features.repository.ui.view
 
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.accenture.cleanarchitecture.R
-import com.accenture.cleanarchitecture.presentation.common.BaseActivity
-import com.accenture.cleanarchitecture.presentation.ui.repository.adapter.RepositoryAdapter
-import com.accenture.cleanarchitecture.presentation.ui.repository.viewmodel.RepositoryViewModel
+import com.accenture.cleanarchitecture.app.common.BaseActivity
+import com.accenture.cleanarchitecture.app.features.repository.ui.adapter.RepositoryAdapter
+import com.accenture.cleanarchitecture.app.features.repository.viewmodel.RepositoryViewModel
 import kotlinx.android.synthetic.main.activity_repository.*
 
 class RepositoryActivity : BaseActivity() {

@@ -1,4 +1,4 @@
-package com.accenture.cleanarchitecture.presentation.entities
+package com.accenture.cleanarchitecture.domain.entities
 
 class Repository(val name: String = "",
                  val fullName: String = "",

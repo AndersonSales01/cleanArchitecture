@@ -1,12 +1,12 @@
-package com.accenture.cleanarchitecture.presentation.ui.repository.adapter
+package com.accenture.cleanarchitecture.app.features.repository.ui.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.accenture.cleanarchitecture.R
-import com.accenture.cleanarchitecture.presentation.entities.Repository
-import com.accenture.cleanarchitecture.presentation.ui.repository.viewholder.ViewHolderRepository
+import com.accenture.cleanarchitecture.domain.entities.Repository
+import com.accenture.cleanarchitecture.app.features.repository.ui.viewholder.ViewHolderRepository
 
 class RepositoryAdapter (private val context: Context) : RecyclerView.Adapter<ViewHolderRepository>() {
 
@@ -19,7 +19,10 @@ class RepositoryAdapter (private val context: Context) : RecyclerView.Adapter<Vi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderRepository {
         val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_list_repository, parent, false)
-        return ViewHolderRepository(view,context)
+        return ViewHolderRepository(
+            view,
+            context
+        )
     }
 
     override fun getItemCount(): Int {

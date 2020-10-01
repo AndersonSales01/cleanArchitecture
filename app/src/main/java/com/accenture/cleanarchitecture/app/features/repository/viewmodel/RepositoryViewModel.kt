@@ -1,17 +1,18 @@
-package com.accenture.cleanarchitecture.presentation.ui.repository.viewmodel
+package com.accenture.cleanarchitecture.app.features.repository.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.accenture.cleanarchitecture.data.repository.RepoRepositoryImpl
+import com.accenture.cleanarchitecture.domain.entities.Repository
 import com.accenture.cleanarchitecture.domain.usecases.GetRepositories
-import com.accenture.cleanarchitecture.presentation.entities.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class RepositoryViewModel : ViewModel() {
-    private var getRepositories = GetRepositories()
+    private var getRepositories = GetRepositories(RepoRepositoryImpl())
     private var liveDataListRepository = MutableLiveData<List<Repository>>()
 
     fun getRepositories() {

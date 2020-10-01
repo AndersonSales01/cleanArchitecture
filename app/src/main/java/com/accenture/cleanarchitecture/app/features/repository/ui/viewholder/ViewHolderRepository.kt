@@ -1,9 +1,9 @@
-package com.accenture.cleanarchitecture.presentation.ui.repository.viewholder
+package com.accenture.cleanarchitecture.app.features.repository.ui.viewholder
 
 import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.accenture.cleanarchitecture.presentation.entities.Repository
+import com.accenture.cleanarchitecture.domain.entities.Repository
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_list_repository.view.*
 
