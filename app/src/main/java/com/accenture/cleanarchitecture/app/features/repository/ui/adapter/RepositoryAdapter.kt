@@ -5,10 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.accenture.cleanarchitecture.R
+import com.accenture.cleanarchitecture.app.features.repository.ui.Router
 import com.accenture.cleanarchitecture.domain.entities.Repository
 import com.accenture.cleanarchitecture.app.features.repository.ui.viewholder.ViewHolderRepository
 
-class RepositoryAdapter (private val context: Context) : RecyclerView.Adapter<ViewHolderRepository>() {
+class RepositoryAdapter (private val context: Context, private val router: Router) : RecyclerView.Adapter<ViewHolderRepository>() {
 
     private var listRepository: List<Repository> = mutableListOf()
 
@@ -18,10 +19,11 @@ class RepositoryAdapter (private val context: Context) : RecyclerView.Adapter<Vi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderRepository {
+
         val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_list_repository, parent, false)
         return ViewHolderRepository(
             view,
-            context
+            context, router
         )
     }
 

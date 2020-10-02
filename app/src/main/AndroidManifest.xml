@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name="com.accenture.cleanarchitecture.app.features.pullrequest.ui.view.PullRequestActivity"></activity>
         <activity android:name=".app.features.repository.ui.view.RepositoryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

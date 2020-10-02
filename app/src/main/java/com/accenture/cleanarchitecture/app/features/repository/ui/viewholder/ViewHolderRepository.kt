@@ -1,13 +1,17 @@
 package com.accenture.cleanarchitecture.app.features.repository.ui.viewholder
 
 import android.content.Context
+import android.content.Intent
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.accenture.cleanarchitecture.app.features.pullrequest.ui.view.PullRequestActivity
+import com.accenture.cleanarchitecture.app.features.repository.ui.Router
+import com.accenture.cleanarchitecture.constants.Constants
 import com.accenture.cleanarchitecture.domain.entities.Repository
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_list_repository.view.*
 
-class ViewHolderRepository(itemView: View, private val context: Context) : RecyclerView.ViewHolder(itemView) {
+class ViewHolderRepository(itemView: View, private val context: Context, private val router: Router) : RecyclerView.ViewHolder(itemView) {
 
     fun bindView(repository: Repository) {
 
@@ -29,10 +33,7 @@ class ViewHolderRepository(itemView: View, private val context: Context) : Recyc
         getImagem(repository.author.urlAvatar)
 
         itemView.setOnClickListener {
-//            val intent = Intent(context, PullRequestActivity::class.java)
-//            intent.putExtra(Constants.NAME_OWNER, repository.author.name)
-//            intent.putExtra(Constants.NAME_REPOSITORY, repository.name)
-//            context.startActivity(intent)
+            router.toGoPullRequestScreen(repository)
         }
     }
 
