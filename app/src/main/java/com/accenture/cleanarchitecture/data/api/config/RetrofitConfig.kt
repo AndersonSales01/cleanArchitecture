@@ -29,9 +29,9 @@ object RetrofitConfig {
 //                    //Responsavel por criar objetos RX
 //                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 //Aplicando coroutine adapter
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
+              //  .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(httpClient.build())
+                //.client(httpClient.build())
                 .build()
         }
 

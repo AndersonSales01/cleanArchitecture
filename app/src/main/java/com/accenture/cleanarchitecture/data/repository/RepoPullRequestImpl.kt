@@ -1,6 +1,7 @@
 package com.accenture.cleanarchitecture.data.repository
 
 import android.util.Log
+import com.accenture.cleanarchitecture.constants.Constants
 import com.accenture.cleanarchitecture.data.api.config.RetrofitConfig
 import com.accenture.cleanarchitecture.data.api.endpoints.PullRequestEndPoint
 import com.accenture.cleanarchitecture.data.mappers.PullRequestMapper
@@ -17,21 +18,31 @@ class RepoPullRequestImpl : IRepoPullRequest {
 
         val listPullRequest = ArrayList<PullRequest>()
 
-        val response = RetrofitConfig.getInstance().create(PullRequestEndPoint::class.java).callPullRequest(nameOwner, nameRepository).await()
+        val response = RetrofitConfig.getInstance().create(PullRequestEndPoint::class.java)
+            .callPullRequest(nameOwner, nameRepository)
+        try {
 
-        Log.d("listresult", response.toString())
+            if (response.isSuccessful) {
 
-        response.let {
+                response.let {
 
-            if (response.isNotEmpty()) {
+                    if (response.body()!!.isNotEmpty()) {
 
-                for (pullRequest in response) {
+                        for (pullRequest in response.body()!!) {
 
-                    val pullRequest = PullRequestMapper.toPullRequestObject(pullRequest)
+                            val pullRequest = PullRequestMapper.toPullRequestObject(pullRequest)
 
-                    listPullRequest.add(pullRequest)
+                            listPullRequest.add(pullRequest)
+                        }
+                    }
                 }
             }
+
+        } catch (e: Exception) {
+            Log.d(
+                Constants.TAG_PULLREQUEST,
+                "Message: ${response.message()} Status Code: ${response.code()}"
+            )
         }
 
         return listPullRequest

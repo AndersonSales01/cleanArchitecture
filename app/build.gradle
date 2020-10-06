@@ -46,7 +46,7 @@ dependencies {
 
     //retofit
    // implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
 
     implementation "com.squareup.picasso:picasso:2.5.2"
 

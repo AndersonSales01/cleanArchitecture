@@ -2,6 +2,7 @@ package com.accenture.cleanarchitecture.app.features.repository.ui.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,6 +56,10 @@ class RepositoryActivity : BaseActivity(), Router {
     override fun observables() {
         repositoryViewModel.listRepositoriesResult().observe(this, Observer { listRepertories ->
             repositoryAdapter.loadRepository(listRepertories)
+        })
+
+        repositoryViewModel.showToastMessage().observe(this, Observer { message ->
+            Toast.makeText(this,message,Toast.LENGTH_LONG).show()
         })
     }
 
