@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,12 +17,18 @@ import com.accenture.cleanarchitecture.app.features.repository.viewmodel.Reposit
 import com.accenture.cleanarchitecture.constants.Constants
 import com.accenture.cleanarchitecture.domain.entities.Repository
 import kotlinx.android.synthetic.main.activity_repository.*
+import javax.inject.Inject
 
 class RepositoryActivity : BaseActivity(), Router {
 
-    private lateinit var repositoryViewModel: RepositoryViewModel
+   // private lateinit var repositoryViewModel: RepositoryViewModel
     private lateinit var manager: LinearLayoutManager
     private lateinit var repositoryAdapter: RepositoryAdapter
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    val repositoryViewModel: RepositoryViewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory)[RepositoryViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +41,10 @@ class RepositoryActivity : BaseActivity(), Router {
     override fun initialize() {
         initViews()
 
-        repositoryViewModel = ViewModelProviders.of(this)
-            .get(RepositoryViewModel::class.java)
+//        repositoryViewModel = ViewModelProviders.of(this)
+//            .get(RepositoryViewModel::class.java)
+
+        subComponent.inject(this)
 
         repositoryViewModel.getRepositories()
 

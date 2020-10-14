@@ -1,5 +1,6 @@
 package com.accenture.cleanarchitecture.data.repository
 
+import android.content.Context
 import android.util.Log
 import com.accenture.cleanarchitecture.constants.Constants
 import com.accenture.cleanarchitecture.data.enuns.Status
@@ -10,8 +11,9 @@ import com.accenture.cleanarchitecture.data.mappers.RepositoryMappper
 import com.accenture.cleanarchitecture.domain.entities.Repository
 import com.accenture.cleanarchitecture.domain.repo.RepoRepository
 import java.lang.Exception
+import javax.inject.Inject
 
-class RepoRepositoryImpl : RepoRepository {
+class RepoRepositoryImpl @Inject constructor() : RepoRepository {
 
     override suspend fun getListRepositoriesRemote(page: Int): List<Repository> {
 

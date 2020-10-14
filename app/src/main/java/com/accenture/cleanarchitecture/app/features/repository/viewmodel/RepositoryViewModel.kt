@@ -1,5 +1,6 @@
 package com.accenture.cleanarchitecture.app.features.repository.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,10 +13,16 @@ import com.accenture.cleanarchitecture.domain.usecases.VerifyNextPageGetReposito
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RepositoryViewModel : ViewModel() {
-    private var getRepositories = GetRepositories(RepoRepositoryImpl())
-    private var verifyNextPage = VerifyNextPageGetRepository()
+class RepositoryViewModel @Inject constructor() : ViewModel() {
+    //private var getRepositories = GetRepositories(RepoRepositoryImpl(context))
+    //private var verifyNextPage = VerifyNextPageGetRepository()
+    @Inject
+    lateinit var getRepositories: GetRepositories
+    @Inject
+    lateinit var verifyNextPage: VerifyNextPageGetRepository
+
     private var liveDataListRepository = MutableLiveData<List<Repository>>()
     private var _MessageLiveData = MutableLiveData<String>()
 

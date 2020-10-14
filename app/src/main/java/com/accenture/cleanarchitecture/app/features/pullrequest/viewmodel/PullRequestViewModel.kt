@@ -10,13 +10,15 @@ import com.accenture.cleanarchitecture.data.repository.RepoRepositoryImpl
 import com.accenture.cleanarchitecture.domain.entities.PullRequest
 import com.accenture.cleanarchitecture.domain.usecases.GetPullRequests
 import com.accenture.cleanarchitecture.domain.usecases.GetRepositories
+import com.accenture.cleanarchitecture.domain.usecases.VerifyNextPageGetRepository
 import com.github.kittinunf.result.coroutines.SuspendableResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
+import javax.inject.Inject
 
-class PullRequestViewModel :  ViewModel() {
+class PullRequestViewModel @Inject constructor()  :  ViewModel() {
 
     private var listPullRequest = mutableListOf<PullRequest>()
 
@@ -25,7 +27,10 @@ class PullRequestViewModel :  ViewModel() {
 
     private var result  = MutableLiveData<Int>()
 
-    private var getPullRequests = GetPullRequests(RepoPullRequestImpl())
+   // private var getPullRequests = GetPullRequests(RepoPullRequestImpl())
+
+    @Inject
+    lateinit var getPullRequests: GetPullRequests
 
 
     fun callRequestPullResquest(nameOwner: String, nameRepository: String) {

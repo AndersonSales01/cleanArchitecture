@@ -19,12 +19,6 @@ class RepositoryTest {
     lateinit var repoRepositoryImpl: RepoRepositoryImpl
     lateinit var repositoryViewModel: RepositoryViewModel
 
-//    @Mock
-//    lateinit var observer: Observer<List<Repository>>
-//
-//    @Mock
-//    lateinit var stateObserver: Observer<List<Repository>>
-
 
     val dispatcher = TestCoroutineDispatcher()
 

@@ -1,5 +1,6 @@
 package com.accenture.cleanarchitecture.data.repository
 
+import android.content.Context
 import android.util.Log
 import com.accenture.cleanarchitecture.constants.Constants
 import com.accenture.cleanarchitecture.data.api.config.RetrofitConfig
@@ -8,8 +9,9 @@ import com.accenture.cleanarchitecture.data.mappers.PullRequestMapper
 import com.accenture.cleanarchitecture.domain.entities.PullRequest
 import com.accenture.cleanarchitecture.domain.repo.IRepoPullRequest
 import java.util.ArrayList
+import javax.inject.Inject
 
-class RepoPullRequestImpl : IRepoPullRequest {
+class RepoPullRequestImpl @Inject constructor() : IRepoPullRequest {
 
     override suspend fun loadPullRequest(
         nameOwner: String,

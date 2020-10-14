@@ -3,6 +3,7 @@ package com.accenture.cleanarchitecture.app.features.pullrequest.ui.view
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.accenture.cleanarchitecture.R
@@ -12,13 +13,20 @@ import com.accenture.cleanarchitecture.app.features.pullrequest.viewmodel.PullRe
 import com.accenture.cleanarchitecture.app.features.repository.viewmodel.RepositoryViewModel
 import com.accenture.cleanarchitecture.constants.Constants
 import kotlinx.android.synthetic.main.activity_pull_request.*
+import javax.inject.Inject
 
 class PullRequestActivity :  BaseActivity() {
 
-    private lateinit var pullRequestViewModel: PullRequestViewModel
+   // private lateinit var pullRequestViewModel: PullRequestViewModel
     private lateinit var pullRequestAdapter: PullRequestAdapter
     private  lateinit var nameRepository: String
     private  lateinit var nameOwner: String
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    val pullRequestViewModel: PullRequestViewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory)[PullRequestViewModel::class.java]
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +38,10 @@ class PullRequestActivity :  BaseActivity() {
 
     override fun initialize(){
 
-        pullRequestViewModel = ViewModelProviders.of(this)
-            .get(PullRequestViewModel::class.java)
+//        pullRequestViewModel = ViewModelProviders.of(this)
+//            .get(PullRequestViewModel::class.java)
+
+        subComponent.inject(this)
 
         initViews()
 
