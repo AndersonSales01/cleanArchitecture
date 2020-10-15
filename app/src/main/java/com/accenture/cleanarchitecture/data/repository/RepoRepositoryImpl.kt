@@ -13,7 +13,7 @@ import com.accenture.cleanarchitecture.domain.repo.RepoRepository
 import java.lang.Exception
 import javax.inject.Inject
 
-class RepoRepositoryImpl @Inject constructor() : RepoRepository {
+class RepoRepositoryImpl @Inject constructor(private var endPoint: RepositoryEndPoint) : RepoRepository {
 
     override suspend fun getListRepositoriesRemote(page: Int): List<Repository> {
 
@@ -21,8 +21,7 @@ class RepoRepositoryImpl @Inject constructor() : RepoRepository {
 
         Log.d(Constants.TAG_REPOSITORY, "Page: $page")
 
-        var response =
-            RetrofitConfig.getInstance().create(RepositoryEndPoint::class.java).listRepository(page)
+        var response = endPoint.listRepository(page)
 
         Log.d(Constants.TAG_REPOSITORY, "Response: ${response}")
         try {
@@ -62,8 +61,7 @@ class RepoRepositoryImpl @Inject constructor() : RepoRepository {
 
         lateinit var result: Resource<ArrayList<Repository>>
 
-        var data =
-            RetrofitConfig.getInstance().create(RepositoryEndPoint::class.java).listRepository(page)
+        var data = endPoint.listRepository(page)
 
         try {
             for (repo in data?.body()!!.repositoryList) {
