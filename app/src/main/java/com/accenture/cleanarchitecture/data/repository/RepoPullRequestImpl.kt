@@ -1,6 +1,5 @@
 package com.accenture.cleanarchitecture.data.repository
 
-import android.content.Context
 import android.util.Log
 import com.accenture.cleanarchitecture.constants.Constants
 import com.accenture.cleanarchitecture.data.api.endpoints.PullRequestEndPoint
@@ -10,7 +9,7 @@ import com.accenture.cleanarchitecture.domain.repo.IRepoPullRequest
 import java.util.ArrayList
 import javax.inject.Inject
 
-class RepoPullRequestImpl @Inject constructor( private  var endPoint: PullRequestEndPoint) : IRepoPullRequest {
+class RepoPullRequestImpl @Inject constructor( private var endPoint: PullRequestEndPoint) : IRepoPullRequest {
 
     override suspend fun loadPullRequest(
         nameOwner: String,

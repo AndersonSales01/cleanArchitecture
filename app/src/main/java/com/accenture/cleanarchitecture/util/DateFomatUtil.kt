@@ -4,7 +4,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-object DateFormatUtil {
+object DateFomatUtil {
 
     @JvmStatic
     fun dateFormat(date: String): String {
@@ -18,7 +18,6 @@ object DateFormatUtil {
             dataFormat = date
             e.printStackTrace()
         }
-
         return dataFormat
     }
 

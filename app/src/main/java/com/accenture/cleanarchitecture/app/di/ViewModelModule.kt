@@ -1,7 +1,10 @@
 package com.accenture.cleanarchitecture.app.di
 
 import androidx.lifecycle.ViewModel
+import com.accenture.cleanarchitecture.app.features.login.viewmodel.LoginViewModel
+import com.accenture.cleanarchitecture.app.features.main.model.MainViewModel
 import com.accenture.cleanarchitecture.app.features.pullrequest.viewmodel.PullRequestViewModel
+import com.accenture.cleanarchitecture.app.features.registeruser.viewmodel.RegisterLoginViewModel
 import com.accenture.cleanarchitecture.app.features.repository.viewmodel.RepositoryViewModel
 import com.example.anderson.projectdagger2.di.ViewModelKey
 import dagger.Binds
@@ -20,4 +23,19 @@ interface ViewModelModule {
     @IntoMap
     @ViewModelKey(PullRequestViewModel::class)
     fun bindPullRequestViewModel(viewModel: PullRequestViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RegisterLoginViewModel::class)
+    fun bindRegisterLoginViewModel(viewModel: RegisterLoginViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LoginViewModel::class)
+    fun bindLoginViewModel(viewModel: LoginViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainViewModel::class)
+    fun bindMainViewModel(viewModel: MainViewModel): ViewModel
 }

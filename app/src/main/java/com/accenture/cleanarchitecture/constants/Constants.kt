@@ -7,4 +7,5 @@ object Constants {
     const val NAME_REPOSITORY = "NAMEREPOSITORY"
     const val TAG_REPOSITORY = "REPOSITORY"
     const val TAG_PULLREQUEST= "PULLREQUEST"
+    const val TAG_LOGIN= "LoginFlow"
 }

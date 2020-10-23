@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import com.accenture.cleanarchitecture.domain.entities.PullRequest
-import com.accenture.cleanarchitecture.util.DateFormatUtil
+import com.accenture.cleanarchitecture.util.DateFomatUtil
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_list_pull_request.view.*
 
@@ -25,7 +25,7 @@ class ViewHolderPullRequest (itemView: View, private val context: Context) : Rec
         txtTitle.text = pullRequest.title
         txtLogin.text = pullRequest.user.name_user
         txtBody.text = pullRequest.body
-        txtDataCreate.text = DateFormatUtil.dateFormat(pullRequest.dataCreatePullRequest)
+        txtDataCreate.text = DateFomatUtil.dateFormat(pullRequest.dataCreatePullRequest)
 
         itemView.setOnClickListener {
 

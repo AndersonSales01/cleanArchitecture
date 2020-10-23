@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">cleanArchitecture</string>
+    <string name="logout_icon">Logout</string>
+    <string name="alert_logout">Você realmente deseja deslogar da aplicação?</string>
+    <string name="alert_logout_cancel">Cancelar</string>
+    <string name="alert_btn_logout">Deslogar</string>
 </resources>

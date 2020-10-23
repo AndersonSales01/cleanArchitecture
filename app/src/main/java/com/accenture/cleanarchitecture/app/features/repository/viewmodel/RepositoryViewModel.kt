@@ -10,12 +10,13 @@ import com.accenture.cleanarchitecture.data.repository.RepoRepositoryImpl
 import com.accenture.cleanarchitecture.domain.entities.Repository
 import com.accenture.cleanarchitecture.domain.usecases.GetRepositories
 import com.accenture.cleanarchitecture.domain.usecases.VerifyNextPageGetRepository
+import com.accenture.cleanarchitecture.util.SharedPreferenceUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RepositoryViewModel @Inject constructor() : ViewModel() {
+class RepositoryViewModel @Inject constructor(var sharedPref: SharedPreferenceUtil) : ViewModel() {
     //private var getRepositories = GetRepositories(RepoRepositoryImpl(context))
     //private var verifyNextPage = VerifyNextPageGetRepository()
     @Inject
@@ -60,6 +61,10 @@ class RepositoryViewModel @Inject constructor() : ViewModel() {
         if (verifyNextPage.execute(currentItems,scrollOutItems,totalItems)) {
             getRepositories()
         }
+    }
+
+    fun userLogout(){
+        sharedPref.saveStatusLogged(false)
     }
 
     fun listRepositoriesResult() : LiveData<List<Repository>> = liveDataListRepository

@@ -2,7 +2,10 @@ package com.accenture.cleanarchitecture.app.features.repository.ui.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -10,12 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.accenture.cleanarchitecture.R
 import com.accenture.cleanarchitecture.app.common.BaseActivity
+import com.accenture.cleanarchitecture.app.features.login.ui.LoginActivity
 import com.accenture.cleanarchitecture.app.features.pullrequest.ui.view.PullRequestActivity
 import com.accenture.cleanarchitecture.app.features.repository.ui.Router
 import com.accenture.cleanarchitecture.app.features.repository.ui.adapter.RepositoryAdapter
 import com.accenture.cleanarchitecture.app.features.repository.viewmodel.RepositoryViewModel
 import com.accenture.cleanarchitecture.constants.Constants
 import com.accenture.cleanarchitecture.domain.entities.Repository
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_repository.*
 import javax.inject.Inject
 
@@ -24,6 +29,7 @@ class RepositoryActivity : BaseActivity(), Router {
    // private lateinit var repositoryViewModel: RepositoryViewModel
     private lateinit var manager: LinearLayoutManager
     private lateinit var repositoryAdapter: RepositoryAdapter
+    private lateinit var alertDialog: AlertDialog
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     val repositoryViewModel: RepositoryViewModel by lazy {
@@ -38,11 +44,27 @@ class RepositoryActivity : BaseActivity(), Router {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when(item.itemId){
+
+            R.id.action_logout -> alertLogout()
+
+        }
+
+        return super.onOptionsItemSelected(item)
+
+    }
+
     override fun initialize() {
         initViews()
-
-//        repositoryViewModel = ViewModelProviders.of(this)
-//            .get(RepositoryViewModel::class.java)
 
         subComponent.inject(this)
 
@@ -79,7 +101,7 @@ class RepositoryActivity : BaseActivity(), Router {
         startActivity(intent)
     }
 
-    fun scrollInfinite() {
+    private fun scrollInfinite() {
 
         list_repositories.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -93,5 +115,24 @@ class RepositoryActivity : BaseActivity(), Router {
         })
     }
 
+    private fun alertLogout(){
+      val alert =  MaterialAlertDialogBuilder(this)
+            .setMessage(resources.getString(R.string.alert_logout))
 
+            .setNegativeButton(resources.getString(R.string.alert_logout_cancel)) { dialog, which ->
+                alertDialog.dismiss()
+            }
+            .setPositiveButton(resources.getString(R.string.alert_btn_logout)) { dialog, which ->
+                toGoLoginActivity()
+            }
+
+        alertDialog = alert.create()
+        alertDialog.show()
+    }
+
+    private fun toGoLoginActivity(){
+        repositoryViewModel.userLogout()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+    }
 }
