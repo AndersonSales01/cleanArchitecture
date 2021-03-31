@@ -24,6 +24,7 @@ class RepositoryViewModel @Inject constructor(var sharedPref: SharedPreferenceUt
 
     private var liveDataListRepository = MutableLiveData<List<Repository>>()
     private var _MessageLiveData = MutableLiveData<String>()
+    private var loading = MutableLiveData<Boolean>()
 
     private var page = 1
 
@@ -39,6 +40,8 @@ class RepositoryViewModel @Inject constructor(var sharedPref: SharedPreferenceUt
 //            }
 //        }
 
+        loading.value =true
+
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 var result = getRepositories.execute(page)
@@ -50,6 +53,7 @@ class RepositoryViewModel @Inject constructor(var sharedPref: SharedPreferenceUt
                 }else {
                     _MessageLiveData.postValue(result.message)
                 }
+                loading.postValue(false)
 
             }
         }
@@ -67,4 +71,5 @@ class RepositoryViewModel @Inject constructor(var sharedPref: SharedPreferenceUt
 
     fun listRepositoriesResult() : LiveData<List<Repository>> = liveDataListRepository
     fun showToastMessage() : LiveData<String> = _MessageLiveData
+    fun loading():  LiveData<Boolean> = loading
 }

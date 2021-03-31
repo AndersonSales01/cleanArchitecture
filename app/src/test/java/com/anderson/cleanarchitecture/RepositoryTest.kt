@@ -1,6 +1,8 @@
 package com.anderson.cleanarchitecture
 
 import android.content.Context
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import com.anderson.cleanarchitecture.app.di.SubComponent
@@ -8,37 +10,57 @@ import com.anderson.cleanarchitecture.data.repository.RepoRepositoryImpl
 import com.anderson.cleanarchitecture.app.features.repository.viewmodel.RepositoryViewModel
 import com.anderson.cleanarchitecture.data.api.endpoints.RepositoryEndPoint
 import com.anderson.cleanarchitecture.data.enuns.Status
+import com.anderson.cleanarchitecture.domain.entities.Author
+import com.anderson.cleanarchitecture.domain.entities.Repository
 import com.anderson.cleanarchitecture.domain.repo.RepoRepository
 import com.anderson.cleanarchitecture.domain.usecases.GetRepositories
 import com.anderson.cleanarchitecture.domain.usecases.VerifyNextPageGetRepository
+import com.anderson.cleanarchitecture.util.SharedPreferenceUtil
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
+import org.amshove.kluent.Verify
+import org.amshove.kluent.called
+import org.amshove.kluent.on
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.mock
+import org.mockito.Mockito.*
+import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 import javax.inject.Inject
 
 @RunWith(MockitoJUnitRunner::class)
+@ExperimentalCoroutinesApi
 class RepositoryTest {
 
     lateinit var repoRepositoryImpl: RepoRepositoryImpl
 
-    val dispatcher = TestCoroutineDispatcher()
-
-   // @get:Rule
-  //  var mainCoroutineRule = MainCoroutineRule()
-
-//    // Set the main coroutines dispatcher for unit testing
 //    @get:Rule
-//    var coroutinesRule = MainCoroutineRule()
+//    val coroutineTestRule = CoroutineTestRule()
+//    @get:Rule
+//    var rule: TestRule = InstantTaskExecutorRule()
+//    @get:Rule
+//    val coroutineTestRule = CoroutineTestRule()
+//
+//    @get:Rule
+//    var mainCoroutineRule = MainCoroutineRule()
 
+    @get:Rule
+    val testInstantTaskExecutorRule: TestRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val testCoroutineRule = TestCoroutineRule()
 
 //    @get:Rule
 //    val rule = InstantTaskExecutorRule()
@@ -56,15 +78,24 @@ class RepositoryTest {
     @Inject
     lateinit var verifyNextPageMockk: VerifyNextPageGetRepository
 
-
+    @Mock
     lateinit var getRepositoriesMockk: GetRepositories
 
 
     private lateinit var  repositoryViewModel: RepositoryViewModel
+    @Mock
+    private lateinit var sharedPref: SharedPreferenceUtil
 
     private lateinit var context: Context
 
     private lateinit var repositoryRepo: RepoRepository
+
+    @Mock
+    lateinit var listObserver: Observer<List<Repository>>
+    @Mock
+    lateinit var loadObserver: Observer<Boolean>
+
+    private lateinit var lifeCycleTestOwner: LifeCycleTestOwner
 
 
 
@@ -89,13 +120,17 @@ class RepositoryTest {
         //FakeAndroidKeyStore.setup
         //getRepositoriesMockk = mock(GetRepositories::class.java)
 
+        MockitoAnnotations.initMocks(this)
+
          var endPoint: RepositoryEndPoint = mock(RepositoryEndPoint::class.java)
 
         repositoryRepo = RepoRepositoryImpl(endPoint)
 
-        getRepositoriesMockk = GetRepositories(repositoryRepo)
+       // getRepositoriesMockk = GetRepositories(repositoryRepo)
         verifyNextPageMockk = VerifyNextPageGetRepository()
-        repositoryViewModel = mock(RepositoryViewModel::class.java)
+        //repositoryViewModel = mock(RepositoryViewModel::class.java)
+
+        repositoryViewModel = RepositoryViewModel(sharedPref)
 //        repositoryViewModel = RepositoryViewModel().apply {
 //            getRepositories = getRepositoriesMockk
 //            verifyNextPage = verifyNextPageMockk
@@ -103,31 +138,39 @@ class RepositoryTest {
 
         //subComponent = (contextapp as MyApplication).appComponent.uiComponent().create()
 
+        lifeCycleTestOwner = LifeCycleTestOwner()
+        lifeCycleTestOwner.onCreate()
+
+//        repositoryViewModel.listRepositoriesResult().observe(lifeCycleTestOwner, listObserver)
+
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        dispatcher.cleanupTestCoroutines()
+        lifeCycleTestOwner.onDestroy()
     }
 
     @Test
     fun getRepositoryTest() {
-        runBlocking {
+        testCoroutineRule.runBlockingTest {
           val result =  getRepositoriesMockk.execute(2)
 
-            if (result.status == Status.SUCCESS){
-                System.out.println("Sucess: " + result + ": " + result.data!![0].name);
-                assertTrue(result.data!!.size > 0)
-            }
+            print(result)
+
+//            if (result.status == Status.SUCCESS){
+//                System.out.println("Sucess: " + result + ": " + result.data!![0].name);
+//                assertTrue(result.data!!.size > 0)
+//            }
         }
     }
 
 
     @Test
     fun getRepositoryTestViewModel() {
-        runBlocking {
-            repositoryViewModel.getRepositories()
+//        runBlocking {
+//
+//            repositoryViewModel.getRepositories()
 //                delay(50000)
 //                repositoryViewModel.listRepositoriesResult().observeForever {list->
 //                    assertTrue(list.isNotEmpty())
@@ -136,7 +179,40 @@ class RepositoryTest {
 
 
 
+//          val test=   repositoryViewModel.listRepositoriesResult().value
+          //  assertTrue(test.size > 0 )
+
+
+     //   }
+
+//        coroutineTestRule.testDispatcher.runBlockingTest {
+//            // Given
+//            lifeCycleTestOwner.onResume()
+//
+//            // Then
+//            Verify on listObserver that listObserver.onChanged(Lis) was called
+//        }
+        testCoroutineRule.runBlockingTest {
+            repositoryViewModel.getRepositories()
+            delay(50000)
+       //    val test = repositoryViewModel.listRepositoriesResult().observeForever(listObserver)
+          //  val test = repositoryViewModel.loading().observeForever(loadObserver)
+
+//            repositoryViewModel.loading().observeForever {
+//                print(it)
+//                assertTrue(it)
+//            }
+
+//            verify(listObserver).onChanged(mock())
+
+            repositoryViewModel.listRepositoriesResult().observeForever {
+                print(it)
+                assertTrue(it.isNotEmpty())
+            }
+
+
         }
+
     }
 
     @Test
@@ -175,32 +251,32 @@ class RepositoryTest {
     }
 
 
-//    private fun mock(): List<RepositoryDTO> {
-//        var list = ArrayList<RepositoryDTO>()
-//        list.add(
-//            RepositoryDTO(
-//                "Anderson",
-//                "Anderson Carlos",
-//                "Dev Android",
-//                10,
-//                10,
-//                AuthorDTO("anderson", "")
-//            )
-//        )
-//
-//        list.add(
-//            RepositoryDTO(
-//                "Anderson2",
-//                "Anderson Carlos2",
-//                "Dev Android2",
-//                20,
-//                20,
-//                AuthorDTO("anderson2", "")
-//            )
-//        )
-//
-//        return list
-//
-//    }
+    private fun mock(): List<Repository> {
+        var list = ArrayList<Repository>()
+        list.add(
+            Repository(
+                "Anderson",
+                "Anderson Carlos",
+                "Dev Android",
+                10,
+                10,
+                Author("anderson", "")
+            )
+        )
+
+        list.add(
+            Repository(
+                "Anderson2",
+                "Anderson Carlos2",
+                "Dev Android2",
+                20,
+                20,
+                Author("anderson2", "")
+            )
+        )
+
+        return list
+
+    }
 
 }

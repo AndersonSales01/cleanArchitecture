@@ -17,11 +17,12 @@ import javax.inject.Inject
 
 class LoginViewModel @Inject constructor (var sharedPref: SharedPreferenceUtil) : ViewModel() {
     //LiveData
-    private val _userEmailError: MutableLiveData<String> = MutableLiveData()
-    private val _userPasswordError: MutableLiveData<String> = MutableLiveData()
-    private val _formLoginValid: MutableLiveData<Boolean> = MutableLiveData()
-    private val _isLogged: MutableLiveData<Boolean> = MutableLiveData()
-    private val _logingMesageError: MutableLiveData<String> = MutableLiveData()
+    private val userEmailError: MutableLiveData<String> = MutableLiveData()
+    private val userPasswordError: MutableLiveData<String> = MutableLiveData()
+    private val formLoginValid: MutableLiveData<Boolean> = MutableLiveData()
+    private val isLogged: MutableLiveData<Boolean> = MutableLiveData()
+    private val logingMesageError: MutableLiveData<String> = MutableLiveData()
+    private val loading: MutableLiveData<Boolean> = MutableLiveData()
 
     private var isEmailValid: Boolean = false
     private var isPasswordValid: Boolean = false
@@ -32,41 +33,42 @@ class LoginViewModel @Inject constructor (var sharedPref: SharedPreferenceUtil) 
     fun userEmailData(email: String){
         if(emailValid(email)){
             isEmailValid = true
-            _userEmailError.value = ""
+            userEmailError.value = ""
         }else {
             isEmailValid = false
-            _userEmailError.value = "Formato de e-mail incorreto!"
+            userEmailError.value = "Formato de e-mail incorreto!"
         }
         formLoginValid()
     }
 
     fun userPasswordData(password: String) {
         if (userPasswordValid(password)) {
-            _userPasswordError.value = ""
+            userPasswordError.value = ""
             isPasswordValid = true
         } else {
-            _userPasswordError.value = "O nome deve ter mais de 5 caracteres!"
+            userPasswordError.value = "O nome deve ter mais de 5 caracteres!"
             isPasswordValid = false
         }
         formLoginValid()
     }
 
     private fun formLoginValid(){
-        _formLoginValid.value =  isEmailValid && isPasswordValid
+        formLoginValid.value =  isEmailValid && isPasswordValid
     }
 
     fun callSigIn(login: Login){
-
+        loading.value = true
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 if (verifyIfUserExists(login)) {
                     Log.d(Constants.TAG_LOGIN, "Usuario não cadastrado $login")
                     sharedPref.saveStatusLogged(true)
-                    _isLogged.postValue(true)
+                    isLogged.postValue(true)
                 }else {
-                    _isLogged.postValue(false)
-                    _logingMesageError.postValue("Usuário não cadastrado!!")
+                    isLogged.postValue(false)
+                    logingMesageError.postValue("Usuário não cadastrado!!")
                 }
+                loading.postValue(false)
             }
         }
     }
@@ -89,9 +91,10 @@ class LoginViewModel @Inject constructor (var sharedPref: SharedPreferenceUtil) 
         return false
     }
 
-    fun isValidForm(): LiveData<Boolean> = _formLoginValid
-    fun emailError(): LiveData<String> = _userEmailError
-    fun passwordError(): LiveData<String> = _userPasswordError
-    fun logingError(): LiveData<String> = _logingMesageError
-    fun isLogged():  LiveData<Boolean> = _isLogged
+    fun isValidForm(): LiveData<Boolean> = formLoginValid
+    fun emailError(): LiveData<String> = userEmailError
+    fun passwordError(): LiveData<String> = userPasswordError
+    fun logingError(): LiveData<String> = logingMesageError
+    fun isLogged():  LiveData<Boolean> = isLogged
+    fun loading():  LiveData<Boolean> = loading
 }

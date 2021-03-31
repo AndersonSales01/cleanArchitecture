@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
@@ -21,6 +22,7 @@ import com.anderson.cleanarchitecture.app.features.repository.viewmodel.Reposito
 import com.anderson.cleanarchitecture.constants.Constants
 import com.anderson.cleanarchitecture.domain.entities.Repository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_repository.*
 import javax.inject.Inject
 
@@ -91,6 +93,14 @@ class RepositoryActivity : BaseActivity(), Router {
 
         repositoryViewModel.showToastMessage().observe(this, Observer { message ->
             Toast.makeText(this,message,Toast.LENGTH_LONG).show()
+        })
+
+        repositoryViewModel.loading().observe(this, androidx.lifecycle.Observer { isLogged ->
+            if (isLogged) {
+                progress_repository.visibility =  View.VISIBLE
+            }else {
+                progress_repository.visibility =  View.GONE
+            }
         })
     }
 

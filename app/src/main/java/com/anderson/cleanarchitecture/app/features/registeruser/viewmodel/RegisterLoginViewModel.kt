@@ -1,6 +1,7 @@
 package com.anderson.cleanarchitecture.app.features.registeruser.viewmodel
 
 
+import android.content.Context
 import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.LiveData
@@ -16,16 +17,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class RegisterLoginViewModel @Inject constructor() : ViewModel() {
+class RegisterLoginViewModel @Inject constructor(context: Context) : ViewModel() {
     //LiveData
-    private val _userName = MutableLiveData<String>()
-    private val _userConfirmPasswordError: MutableLiveData<String> = MutableLiveData()
-    private val _formRegisterValid: MutableLiveData<Boolean> = MutableLiveData()
-    private val _userNameMesageError: MutableLiveData<String> = MutableLiveData()
-    private val _userPasswordError: MutableLiveData<String> = MutableLiveData()
-    private val _loginExistingMesage: MutableLiveData<String> = MutableLiveData()
-    private val _userEmailError: MutableLiveData<String> = MutableLiveData()
-    private val _registerUserSucess: MutableLiveData<Boolean> = MutableLiveData()
+    private val userName = MutableLiveData<String>()
+    private val userConfirmPasswordError: MutableLiveData<String> = MutableLiveData()
+    private val formRegisterValid: MutableLiveData<Boolean> = MutableLiveData()
+    private val userNameMesageError: MutableLiveData<String> = MutableLiveData()
+    private val userPasswordError: MutableLiveData<String> = MutableLiveData()
+    private val loginExistingMesage: MutableLiveData<String> = MutableLiveData()
+    private val userEmailError: MutableLiveData<String> = MutableLiveData()
+    private val registerUserSucess: MutableLiveData<Boolean> = MutableLiveData()
 
     private var isUserNameValid: Boolean = false
     private var isEmailValid: Boolean = false
@@ -41,11 +42,11 @@ class RegisterLoginViewModel @Inject constructor() : ViewModel() {
 
     fun userNameData(userName: String) {
         if (userNameValid(userName)) {
-            _userName.value = userName
+            this.userName.value = userName
             isUserNameValid = true
-            _userNameMesageError.value = ""
+            userNameMesageError.value = ""
         } else {
-            _userNameMesageError.value = "O nome deve ter mais de 3 caracteres!"
+            userNameMesageError.value = "O nome deve ter mais de 3 caracteres!"
             isUserNameValid = false
         }
 
@@ -55,19 +56,19 @@ class RegisterLoginViewModel @Inject constructor() : ViewModel() {
     fun userEmailData(email: String){
         if(emailValid(email)){
             isEmailValid = true
-            _userEmailError.value = ""
+            userEmailError.value = ""
         }else {
             isEmailValid = false
-            _userEmailError.value = "Formato de e-mail incorreto!"
+            userEmailError.value = "Formato de e-mail incorreto!"
         }
     }
 
     fun userPasswordData(password: String) {
         if (userPasswordValid(password)) {
-            _userPasswordError.value = ""
+            userPasswordError.value = ""
             isPasswordValid = true
         } else {
-            _userPasswordError.value = "O nome deve ter mais de 5 caracteres!"
+            userPasswordError.value = "O nome deve ter mais de 5 caracteres!"
             isPasswordValid = false
         }
 
@@ -76,10 +77,10 @@ class RegisterLoginViewModel @Inject constructor() : ViewModel() {
 
     fun userConfirmPasswordData(password: String, confirmPassword: String) {
         if (userConfirmPasswordValid(password,confirmPassword)) {
-            _userConfirmPasswordError.value = ""
+            userConfirmPasswordError.value = ""
             isConfirmPasswordValid = true
         } else {
-            _userConfirmPasswordError.value = "Por favor confirmar a senha correta!! "
+            userConfirmPasswordError.value = "Por favor confirmar a senha correta!! "
             isConfirmPasswordValid = false
         }
 
@@ -115,7 +116,7 @@ class RegisterLoginViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun formRegisterValidate() {
-        _formRegisterValid.value =
+        formRegisterValid.value =
             isUserNameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid
     }
 
@@ -126,9 +127,9 @@ class RegisterLoginViewModel @Inject constructor() : ViewModel() {
                     Log.d(Constants.TAG_LOGIN, "Usuario não cadastrado $login")
 
                     registerLogin.execute(login)
-                    _registerUserSucess.postValue(true)
+                    registerUserSucess.postValue(true)
                 }else {
-                    _loginExistingMesage.postValue("Usuário já cadastrado!!")
+                    loginExistingMesage.postValue("Usuário já cadastrado!!")
                 }
             }
         }
@@ -136,12 +137,12 @@ class RegisterLoginViewModel @Inject constructor() : ViewModel() {
 
     private suspend fun verifyUserExisting(login: Login) = verifyIfUserExists.execute(login)
 
-    fun userNameLiveData(): LiveData<String> = _userName
-    fun userNameError(): LiveData<String> = _userNameMesageError
-    fun passwordError(): LiveData<String> = _userPasswordError
-    fun confirmPasswordError(): LiveData<String> = _userConfirmPasswordError
-    fun emailError(): LiveData<String> = _userEmailError
-    fun isValidForm(): LiveData<Boolean> = _formRegisterValid
-    fun userExistingMesage(): LiveData<String> = _loginExistingMesage
-    fun registerUserSucess(): LiveData<Boolean> = _registerUserSucess
+    fun userNameLiveData(): LiveData<String> = userName
+    fun userNameError(): LiveData<String> = userNameMesageError
+    fun passwordError(): LiveData<String> = userPasswordError
+    fun confirmPasswordError(): LiveData<String> = userConfirmPasswordError
+    fun emailError(): LiveData<String> = userEmailError
+    fun isValidForm(): LiveData<Boolean> = formRegisterValid
+    fun userExistingMesage(): LiveData<String> = loginExistingMesage
+    fun registerUserSucess(): LiveData<Boolean> = registerUserSucess
 }

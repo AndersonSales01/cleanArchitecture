@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -38,8 +39,6 @@ class LoginActivity : BaseActivity() {
         initViews()
 
         observables()
-
-
     }
 
     override fun initViews() {
@@ -88,6 +87,14 @@ class LoginActivity : BaseActivity() {
         viewModel.isLogged().observe(this, androidx.lifecycle.Observer { isLogged ->
             if (isLogged) {
                 toGoRepositoryScreen()
+            }
+        })
+
+        viewModel.loading().observe(this, androidx.lifecycle.Observer { isLogged ->
+            if (isLogged) {
+                login_loading.visibility =  View.VISIBLE
+            }else {
+                login_loading.visibility =  View.GONE
             }
         })
 
